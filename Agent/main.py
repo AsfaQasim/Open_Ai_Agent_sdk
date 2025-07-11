@@ -24,15 +24,19 @@ config = RunConfig(
     model_provider= external_client,
     tracing_disabled=True
 )
+
+def dynamic_instruction(wrapper:RunContextWrapper, agent:Agent) ->str:
+    return "You are a helpful assiatant"
+    
 agent = Agent(
     name = "Assistant",
-    instructions= "You are a helpful assistant!",
+    instructions= dynamic_instruction,
   
 )
 
 result = Runner.run_sync(
     starting_agent= agent,
-    input = "What is the capital pf pakistan?",
+    input = "What is the capital of pakistan?",
     run_config=config
     
 )
