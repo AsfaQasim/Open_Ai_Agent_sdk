@@ -1,7 +1,11 @@
 
-from agents import AsyncOpenAI, OpenAIChatCompletionsModel, Runner, Agent, RunConfig, set_tracing_disabled, RunContextWrapper, enable_verbose_stdout_logging
+from agents import AsyncOpenAI, OpenAIChatCompletionsModel, Runner, Agent, RunConfig, set_tracing_disabled, RunContextWrapper, enable_verbose_stdout_logging, handoff, HandoffInputData
+from agents.handoffs import THandoffInput
 import os
 from dotenv import load_dotenv
+from rich import print
+from typing import Callable
+from pydantic import BaseModel
 
 load_dotenv()
 set_tracing_disabled(disabled= True)
@@ -25,7 +29,6 @@ config = RunConfig(
     model_provider= external_client,
     tracing_disabled=True
 )
-
 
 math_Expert = Agent (
     name = "Mathematician",
@@ -52,11 +55,41 @@ triage_Agent = Agent(
     model = model
 )
 
-prompt = input("Enter your question: ")
+# prompt = input("Enter your question: ")
 result = Runner.run_sync(
     starting_agent= triage_Agent,
-    input= prompt,
+     input=  """
+     What is 2 + 2?
+     what is the gravity of earth?
+     """, 
     
 )
+
+# input_filter: Callable[[HandoffInputData], HandoffInputData] | None = None,
+
+def input_filter(data: HandoffInputData) -> HandoffInputData:
+    return data
+print("Input filter is executed")
+
+
+class Myinputtype(BaseModel):
+    user_query : str
+
+#  On_handoff
+
+def on_handoff(wrapper:RunContextWrapper, input_type: Myinputtype):
+    print("On handoff function executed!")
+
+
+handoff_Agent = handoff(
+    agent =  triage_Agent,
+    tool_name_override= "new agent",
+    tool_description_override= "You are an expert in maths and physics",
+    input_filter = input_filter,
+    on_handoff = on_handoff,
+    input_type= Myinputtype
+)
+
+print(handoff_Agent)
 
 print(result.final_output)
