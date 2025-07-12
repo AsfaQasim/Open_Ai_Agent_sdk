@@ -1,8 +1,10 @@
 
-from agents import AsyncOpenAI, OpenAIChatCompletionsModel, Runner, Agent, RunConfig, set_tracing_disabled, RunContextWrapper
+from agents import AsyncOpenAI, OpenAIChatCompletionsModel, Runner, Agent, RunConfig, set_tracing_disabled, RunContextWrapper, function_tool, enable_verbose_stdout_logging, ModelSettings
 import os
 from dotenv import load_dotenv
-
+from rich import print
+from pydantic import BaseModel
+enable_verbose_stdout_logging()
 
 load_dotenv()
 set_tracing_disabled(disabled= True)
@@ -28,15 +30,31 @@ config = RunConfig(
 def dynamic_instruction(wrapper:RunContextWrapper, agent:Agent) ->str:
     return "You are a helpful assiatant"
     
+@function_tool
+def add(a: int, b: int) -> int:
+    """Add the two number."""
+    return a + b
+
+class OutputType(BaseModel):
+    question:str
+    answer: str
+    
 agent = Agent(
     name = "Assistant",
     instructions= dynamic_instruction,
+    tools=[add],
+    # model_settings= ModelSettings(
+    #     tool_choice=  "auto"
+    # )
+    output_type= OutputType
   
 )
 
+prompt = input("What is your question?: ")
+
 result = Runner.run_sync(
     starting_agent= agent,
-    input = "What is the capital of pakistan?",
+    input = prompt,
     run_config=config
     
 )
