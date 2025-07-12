@@ -1,9 +1,12 @@
 
-from agents import AsyncOpenAI, OpenAIChatCompletionsModel, Runner, Agent, RunConfig, set_tracing_disabled, RunContextWrapper, function_tool, enable_verbose_stdout_logging, ModelSettings
+from agents import AsyncOpenAI, OpenAIChatCompletionsModel, Runner, Agent, RunConfig, set_tracing_disabled, RunContextWrapper, function_tool, enable_verbose_stdout_logging, ModelSettings, FunctionToolResult, ToolsToFinalOutputResult
 import os
 from dotenv import load_dotenv
 from rich import print
 from pydantic import BaseModel
+from agents.agent import StopAtTools
+
+
 enable_verbose_stdout_logging()
 
 load_dotenv()
@@ -35,9 +38,23 @@ def add(a: int, b: int) -> int:
     """Add the two number."""
     return a + b
 
+@function_tool
+def sub(a: int, b: int) -> int:
+    """Add the two number."""
+    return a  - b
+
 class OutputType(BaseModel):
     question:str
     answer: str
+    
+    
+def my_func(wrapper: RunContextWrapper, tool_agent: list[FunctionToolResult]) -> ToolsToFinalOutputResult:
+    print("my_Func_executed!")
+    return ToolsToFinalOutputResult(
+        is_final_output= True,
+        final_output= "Hello"
+    )
+    
     
 agent = Agent(
     name = "Assistant",
@@ -45,7 +62,7 @@ agent = Agent(
     tools=[add],
     # model_settings= ModelSettings(
     #     tool_choice=  "auto"
-    # )
+    # 
     output_type= OutputType
   
 )
