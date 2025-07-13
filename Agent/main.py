@@ -31,7 +31,7 @@ config = RunConfig(
 )
 
 def dynamic_instruction(wrapper:RunContextWrapper, agent:Agent) ->str:
-    return "You are a helpful assiatant"
+    return "You are a helpful assistant"
     
 @function_tool
 def add(a: int, b: int) -> int:
