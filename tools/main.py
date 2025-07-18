@@ -69,7 +69,9 @@ agent = Agent(
     """,
      model= model,
      tools=[get_riddle, get_Weather],
-     tool_use_behavior= StopAtTools()
+     tool_use_behavior= StopAtTools(
+      stop_at_tool_names=["get_Weather"]
+     )
 
 
     )
