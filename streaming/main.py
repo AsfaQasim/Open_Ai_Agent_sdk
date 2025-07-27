@@ -4,6 +4,7 @@ import os
 import asyncio
 from rich import print
 from openai.types.responses import  ResponseTextDeltaEvent
+
 load_dotenv()
 
 set_tracing_disabled(disabled=True)
@@ -48,7 +49,7 @@ async def main():
     )
     
     async for event in res.stream_events():
-        if event.type == "raw_response_event" and not isinstance(event.data, ResponseTextDeltaEvent):
+        if event.type == "raw_response_event" and  isinstance(event.data, ResponseTextDeltaEvent):
         #    print(event.data.delta)
            continue
         elif event.type == "agent_updated_stream_event":
