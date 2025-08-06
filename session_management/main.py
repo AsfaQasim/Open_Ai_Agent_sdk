@@ -10,13 +10,11 @@ set_tracing_disabled(disabled=True)
 
 async def main():
 
-    session = SQLiteSession(session_id="user_2", db_path="conversation.db")
-    await session.clear_session()
-
-  
+    session = SQLiteSession(session_id="user_1", db_path="conversation.db")
+    # await session.clear_session()
     userData = await session.get_items()
-    for user in userData:
-        print(f"[bold green]{user['role']}[/bold green]: {user['content']}")
+    # for user in userData:
+    #     print(f"[bold green]{user['role']}[/bold green]: {user['content']}")
 
     gemini_api_key = os.getenv("Gemini_Api_Key")
     client = AsyncOpenAI(
