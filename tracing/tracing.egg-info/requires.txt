@@ -1,0 +1,4 @@
+decouple>=0.0.7
+openai-agents>=0.2.5
+python-decouple>=3.8
+python-dotenv>=1.1.1

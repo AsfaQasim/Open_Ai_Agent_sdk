@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+my_tool/tool.py
+tracing.egg-info/PKG-INFO
+tracing.egg-info/SOURCES.txt
+tracing.egg-info/dependency_links.txt
+tracing.egg-info/requires.txt
+tracing.egg-info/top_level.txt

@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: tracing
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+Requires-Dist: decouple>=0.0.7
+Requires-Dist: openai-agents>=0.2.5
+Requires-Dist: python-decouple>=3.8
+Requires-Dist: python-dotenv>=1.1.1
